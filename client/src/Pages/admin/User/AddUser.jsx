@@ -24,7 +24,7 @@ const AddUser = () => {
     const password = e.target.password.value;
     const location = locationData?.city;
     const votingAddress = e.target.votingAddress.value;
-    const profile = e.target.profile.files[0];
+    // const profile = e.target.profile.files[0];
     const sendData = new FormData();
     sendData.append("username", username);
     sendData.append("fname", fname);
@@ -34,8 +34,14 @@ const AddUser = () => {
     sendData.append("password", password);
     sendData.append("location", location);
     sendData.append("votingAddress", votingAddress);
-    sendData.append("profile", profile);
-    sendData.append("avatar", username + "." + profile.name.split(".").pop());
+    // sendData.append("profile", profile);
+    // sendData.append("avatar", username + "." + profile.name.split(".").pop());
+
+    const profile = e.target.profile.files;
+    for (let i = 0; i < profile.length; i++) {
+      sendData.append("profile", profile[i]);
+      sendData.append("avatar", username + "-" + (i + 1) + "." + profile[i].name.split(".").pop());
+    }
 
     console.log(sendData);
 
@@ -61,7 +67,7 @@ const AddUser = () => {
           mobile,
           // password,
           location,
-          profile,
+          // profile,
           votingAddress,
           organizerConnected,
           listSize,
@@ -74,20 +80,12 @@ const AddUser = () => {
           mobile,
           // password,
           location,
-          profile,
+          // profile,
           votingAddress,
           organizerConnected,
           listSize,
         );
-        // toast.info(
-        //   'We are adding Voter , Kindly Wait till Confirmation...!',
-        //   {
-        //     position: toast.POSITION.TOP_CENTER,
-        //   },
-        // );
-        // toast.success('Voter Added Successfully....!', {
-        //   position: toast.POSITION.TOP_CENTER,
-        // });
+
         toast.success('Voter Added Successfully....!', {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -212,6 +210,7 @@ const AddUser = () => {
                     type="file"
                     name="profile"
                     id="profile"
+                    multiple
                     required
                   // fullWidth={true}
                   />

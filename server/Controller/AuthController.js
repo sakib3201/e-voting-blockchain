@@ -23,10 +23,17 @@ var storage = multer.diskStorage({
     cb(null, "Faces");
   },
   filename: function (req, file, cb) {
-    cb(null, req.body.username + "." + file.originalname.split(".").pop());
+    let i;
+    for (i = 0; i < req.files.length; i++) {
+      if (req.files.length === 3) {
+        // console.log(req.files.length);
+        console.log(req.body.username + "-" + (i + 1) + "." + file.originalname.split(".").pop());
+      }
+    }
+    cb(null, req.body.username + "-" + (i) + "." + file.originalname.split(".").pop());
   },
 });
-var upload = multer({ storage: storage }).single("profile");
+var upload = multer({ storage: storage }).array("profile", 3);
 export const register = {
   validator: async (req, res, next) => {
     next();
@@ -55,7 +62,7 @@ export const register = {
         }
       } catch (e) {
         console.log(e);
-        return res.status(500).send("Registeration Failed");
+        return res.status(500).send("Registration Failed");
       }
     });
   },

@@ -25,7 +25,7 @@ contract Voting {
         string voterEmail;
         string voterMobile;
         string voterLocation;
-        string voterProfile;
+        // string voterProfile;
         // string voterPassword;
         address votingAddress;
         bool hasVoted;
@@ -134,7 +134,7 @@ contract Voting {
         string memory _email,
         string memory _mobile, 
         string memory _location, 
-        string memory _profile, 
+        // string memory _profile, 
         address _address,
         address _organizer,
         uint256 _id
@@ -153,7 +153,7 @@ contract Voting {
         voter.voterEmail = _email;
         voter.voterMobile = _mobile;
         voter.voterLocation = _location;
-        voter.voterProfile = _profile;
+        // voter.voterProfile = _profile;
         voter.votingAddress = _address;
         organizerElections[_organizer][_id].allVoterAddresses.push(
             _address
