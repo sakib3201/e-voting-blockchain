@@ -55,6 +55,12 @@ const ViewDashboard = () => {
         }
       } catch (error) {
         console.log('Err at addOrganizer()', error);
+        toast.error(
+          `${error?.reason}`,
+          {
+            position: toast.POSITION.TOP_CENTER,
+          },
+        );
       }
     }
     async function getUsers() {
