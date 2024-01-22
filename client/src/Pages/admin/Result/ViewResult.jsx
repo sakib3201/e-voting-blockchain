@@ -75,8 +75,8 @@ const ViewResult = () => {
       // const ans = await getResult(transactions);
       // setResult(ans);
     }
-    if (result?.length === 0) getData();
-  }, [result?.length]);
+    getData();
+  }, []);
   return (
     <>
       {result?.length !== 0 ?

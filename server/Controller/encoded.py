@@ -2,10 +2,17 @@ import face_recognition
 import os
 import cv2
 import numpy as np
+import sys
 
-path = os.getcwd()+"/Faces"                   #Add Your url
+# usernameArg = sys.argv[1]
+# username = str1 = "".join(usernameArg)
+username = sys.argv[1]
+# print(username)
+os.chdir("..")
+path = os.getcwd() +"/server/Faces/"+username     #Add Your url
 
 classNames = [os.path.splitext(file)[0] for file in os.listdir(path)]
+# print(classNames)
 
 images = [cv2.imread(os.path.join(path, file)) for file in os.listdir(path)]
 

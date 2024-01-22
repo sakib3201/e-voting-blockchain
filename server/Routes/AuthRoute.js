@@ -1,13 +1,13 @@
 import { Router } from "express";
 import {
-  register,
-  login,
-  users,
-  elections,
-  candidates,
-  phase,
-  votingMail,
   a,
+  candidates,
+  elections,
+  login,
+  phase,
+  register,
+  users,
+  votingMail,
 } from "../Controller/AuthController.js";
 
 const router = Router();
@@ -32,10 +32,11 @@ router.get("/election/delete/:id", elections.delete);
 router.get("/users", users.getUsers);
 router.get("/user/:id", users.getUser);
 router.get("/user/username/:id", users.getUserByName);
+// router.get("/user/votingAddress/:id", users.getUserByAddress);
 router.get("/user/delete/:id", users.delete);
 router.post("/user/edit/:id", users.edit);
 
-router.post("/op", a.sc);
+router.post("/op/:id", a.sc);
 router.post("/votingEmail", votingMail.send);
 
 export default router;

@@ -5,13 +5,16 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { isFaceRecognitionEnable, serverLink } from "../../Data/Variables";
+import { TransactionContext } from "../../context/TransactionContext";
 
 
 const CandidateLayout = (props) => {
+  const { currentAccount } =
+    useContext(TransactionContext);
   const navigate = useNavigate();
   const [data, setData] = useState("");
   const [msg, setMsg] = useState("");
@@ -26,7 +29,70 @@ const CandidateLayout = (props) => {
     if (isFaceRecognitionEnable) {
       setMsg(" Accessing Camera");
       try {
-        var res = await axios.post(serverLink + "op");
+        // console.log(currentAccount);
+        const voterAddress = await axios.get(serverLink + "users");
+        let userAddress = voterAddress?.data;
+        let userUsername;
+        for (let i = 0; i < userAddress?.length; i++) {
+          if ((userAddress[i]?.votingAddress).toLowerCase() === (currentAccount).toLowerCase()) {
+            userUsername = userAddress[i]?.username;
+            let res = await axios.post(serverLink + "op/" + userUsername);
+            // let userName = res?.data?.split("-")[0];
+            let userName = res?.data[0]?.split("-")[0];
+            // console.log(userName);
+
+            setMsg(userName + " Detected");
+
+            res = await axios.get(serverLink + "user/username/" + userName);
+            let user = res?.data[0];
+            if (!user) {
+              // alert("User with " + userName + "username Not Found");
+              toast.error(`User with ${userName} username Not Found`, {
+                position: toast.POSITION.TOP_CENTER,
+              });
+              setLoading(false);
+              return;
+            }
+            const tmp = {
+              candidate_id: data?._id,
+              candidate_username: props?.username,
+              candidate_address: data?.address,
+              election_id: props?.id,
+              user_id: user?._id,
+              user_username: user?.username,
+              user_votingAddress: user?.votingAddress,
+            };
+
+            setMsg("");
+            setLoading(false);
+
+            navigate(link, { state: { info: tmp } });
+            console.log(res);
+            return;
+          }
+          else {
+            toast.error(`Your metamask account address must be valid as a voter`, {
+              position: toast.POSITION.TOP_CENTER,
+            });
+            setLoading(false);
+            return;
+          }
+        }
+        // let options;
+        // if (userUsername) {
+        //   // options = {
+        //   //   args: [`${userUsername}`]
+        //   // }
+        //   // console.log(options.args);
+        //   var res = await axios.post(serverLink + "op/" + userUsername);
+        //   console.log(res);
+        //   // console.log(userUsername);
+        // }
+        // else {
+        //   toast.error(`Please provide your metamask account address`, {
+        //     position: toast.POSITION.TOP_CENTER,
+        //   });
+        // }
       } catch (err) {
         // alert(err.response.data);
         toast.error(`${err?.response?.data}`, {
@@ -35,34 +101,7 @@ const CandidateLayout = (props) => {
         setLoading(false);
         return;
       }
-      let userName = res?.data;
 
-      setMsg(userName + " Detected");
-
-      res = await axios.get(serverLink + "user/username/" + userName);
-      let user = res?.data[0];
-      if (!user) {
-        // alert("User with " + userName + "username Not Found");
-        toast.error(`User with ${userName} username Not Found`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        setLoading(false);
-        return;
-      }
-      const tmp = {
-        candidate_id: data?._id,
-        candidate_username: props?.username,
-        candidate_address: data?.address,
-        election_id: props?.id,
-        user_id: user?._id,
-        user_username: user?.username,
-        user_votingAddress: user?.votingAddress,
-      };
-
-      setMsg("");
-      setLoading(false);
-
-      navigate(link, { state: { info: tmp } });
     } else {
       const sendingData = {
         candidate_id: data?._id,

@@ -20,7 +20,10 @@ import User from "../Models/User.js";
 //User
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "Faces");
+    const path = `Faces/${req.body.username}/`;
+    fs.mkdirSync(path, { recursive: true })
+    cb(null, path);
+    // cb(null, "Faces");
   },
   filename: function (req, file, cb) {
     let i;
@@ -95,9 +98,10 @@ export const login = {
 
 export const users = {
   deleteUserProfile: (user) => {
-    const filePath = `Faces/${user.avatar}`;
+    const filePath = `Faces/${user.username}`;
 
-    fs.unlink(filePath, (err) => {
+    // fs.unlink(filePath, (err) => {
+    fs.rmSync(filePath, { recursive: true, force: true }, (err) => {
       if (err) {
         console.log(err);
         return false;
@@ -133,6 +137,15 @@ export const users = {
       return res.status(500).send("Error!");
     }
   },
+  // getUserByAddress: async (req, res) => {
+  //   try {
+  //     const tmp = await User.find({ votingAddress: req.params.id });
+  //     return res.status(201).send(tmp);
+  //   } catch (e) {
+  //     console.log(e);
+  //     return res.status(500).send("Error!");
+  //   }
+  // },
   delete: async (req, res) => {
     try {
       const tmp = await User.findByIdAndDelete(req.params.id);
@@ -347,17 +360,23 @@ const sendMail = async (mailContent, mailSubject, user) => {
 
 export const a = {
   sc: async (req, res) => {
+    // console.log(req.params.id);
+    let options = {
+      args: [`${req.params.id}`]
+    }
     const filePath = path.resolve(process.cwd(), "Controller", "fr.py");
-    PythonShell.run(filePath, null, function (err, result) {
+    PythonShell.run(filePath, options, function (err, result) {
       // console.log(result);
       // console.log("Error : ");
       // console.log(err);
       // console.log("Python script finished");
       if (err) {
+        console.log(err);
         return res.status(500).send("Error While Running Python");
       }
 
       if (result) {
+        console.log(result);
         return res.status(201).send(result);
       } else {
         return res.status(500).send("No face Match Found");

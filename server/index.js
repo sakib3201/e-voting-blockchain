@@ -11,6 +11,9 @@ const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use("/api/auth", Auth);
+app.get("/", () => {
+  console.log("Rakib");
+});
 
 const connectDB = async () => {
   try {
