@@ -75,7 +75,7 @@ const ViewCandidate = () => {
 
   useEffect(() => {
     async function getData() {
-      let res = await axios.get("http://localhost:1322/api/auth/candidates");
+      let res = await axios.get(`${serverLink}candidates`);
       let users = res.data;
       setData(users);
     }

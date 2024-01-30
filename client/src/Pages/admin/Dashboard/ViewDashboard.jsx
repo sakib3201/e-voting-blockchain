@@ -4,7 +4,9 @@ import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import ContentHeader from "../../../Components/ContentHeader";
 import DashboardCard from "../../../Components/DashboardCard";
+import { serverLink } from "../../../Data/Variables";
 import { TransactionContext } from "../../../context/TransactionContext";
+
 // import { signer } from "../../../context/TransactionContext";
 import "../../../style.css";
 import contractInstance from "../../../utils/contractInstance.js";
@@ -64,14 +66,14 @@ const ViewDashboard = () => {
       }
     }
     async function getUsers() {
-      let res = await axios.get("http://localhost:1322/api/auth/users");
+      let res = await axios.get(`${serverLink}users`);
       let users = res.data;
       res = null;
       setUsers(users.length);
-      res = await axios.get("http://localhost:1322/api/auth/candidates");
+      res = await axios.get(`${serverLink}candidates`);
       let candidates = res.data;
       setCandidates(candidates.length);
-      res = await axios.get("http://localhost:1322/api/auth/elections");
+      res = await axios.get(`${serverLink}elections`);
       let elections = res.data;
       setElections(elections.length);
       if (!localStorage.getItem('connected address') || localStorage.getItem('connected address') === "") addOrganizer();

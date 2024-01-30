@@ -1,13 +1,13 @@
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
+import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import ContentHeader from "../../../Components/ContentHeader";
 import { ErrorMessage } from "../../../Components/Form/ErrorMessage";
 import InputField from "../../../Components/Form/InputField";
+import { serverLink } from "../../../Data/Variables";
 import contractInstance from "../../../utils/contractInstance";
 
 export default function AddCandidate() {
@@ -139,7 +139,7 @@ export default function AddCandidate() {
         //   }
         // }, 5000);
         axios
-          .post("http://localhost:1322/api/auth/candidate/register", data)
+          .post(`${serverLink}candidate/register`, data)
           .then((res) => {
             console.log(res.status);
             if (res.status === 201) {

@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import ContentHeader from "../../../Components/ContentHeader";
 import InputField from "../../../Components/Form/InputField";
 import InputTags from "../../../Components/Form/InputTags";
+import { serverLink } from "../../../Data/Variables";
+
 
 const AddElection = () => {
   const navigate = useNavigate();
@@ -18,7 +20,7 @@ const AddElection = () => {
     console.log(data);
 
     axios
-      .post("http://localhost:1322/api/auth/election/register", data)
+      .post(`${serverLink}election/register`, data)
       .then((res) => {
         console.log(res.status);
         if (res.status === 201) {
