@@ -12,7 +12,8 @@ To run the script in your vs code open a terminal tab and navigate to the code d
 ```
 On another separate terminal tab run:
 ```
- npm i->npm run dev
+ npm i
+ npm run dev
 ```
 You will also need to create an env file as the given .env.sample file env.sample and add the port number, mongodb atlas database information for running the codebase.
 
